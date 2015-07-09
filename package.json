@@ -1,0 +1,27 @@
+{
+  "name": "parkeerwidget-amsterdam",
+  "version": "1.0.0",
+  "description": "Embeddable widget for finding the best parking spot in Amsterdam",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yumecode/parkeerwidget-amsterdam.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yumecode/parkeerwidget-amsterdam/issues"
+  },
+  "homepage": "https://github.com/yumecode/parkeerwidget-amsterdam",
+  "devDependencies": {
+    "browser-sync": "^2.7.13",
+    "gulp": "^3.9.0",
+    "gulp-less": "^3.0.3",
+    "gulp-param": "^0.6.3",
+    "gulp-watch": "^4.2.4",
+    "path": "^0.11.14"
+  }
+}
