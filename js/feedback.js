@@ -40,7 +40,7 @@ var Feedback =  {
 			if (formData !== ''){
 				$.ajax({
 		            type: 'post',
-		            url: '/feedback.php',
+		            url: '../feedback',
 		            data: formData,
 		            success: function (data) {
 		            	console.log(data);
