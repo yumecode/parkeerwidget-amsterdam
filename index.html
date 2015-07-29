@@ -14,7 +14,7 @@
 		
 
 		<!-- Alleen voor testen amsterdam Avenir include -->
-		<script type="text/javascript" src="//fast.fonts.net/jsapi/966743dd-98a0-4eff-8095-71b3f07116ab.js"></script>
+		<script type="text/javascript" src="http://fast.fonts.net/jsapi/93c8c4e6-8476-47b2-8984-d352471847d1.js"></script>
 	
 		
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
@@ -219,6 +219,7 @@
 
 			<div class="map-holder">
 				<div id="map"></div>
+				<div id="map-touch"></div>
 			</div>
 
 			
@@ -323,7 +324,7 @@
 	<script>
 		
 		var GoogleLayer = new L.Google('ROADMAP');
-		Map = new L.Map('map', {center: new L.LatLng(52.37, 4.89), zoom: 11, layers: GoogleLayer});
+		Map = new L.Map('map', {center: new L.LatLng(52.37, 4.89), zoom: 11, layers: GoogleLayer, draggable: false});
 		
 		$(document).ready(function() {
 
