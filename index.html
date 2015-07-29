@@ -91,7 +91,7 @@
 								if(nameVal.indexOf('&') != -1){
 									nameVal = nameVal.substr(0, nameVal.indexOf('&'));		
 								}
-								document.getElementById('searchInput').value = nameVal;
+								document.getElementById('searchInput').value = decodeURIComponent(nameVal);
 							}
 							
 						</script>

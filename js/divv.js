@@ -224,8 +224,12 @@ var DW = {
 		$('.address').click(function(e){
 			$(this).find('input#searchInput').focus().select();
 		});
+		
+		
+		if($('#searchInput').val() != ''){
+			
+		}
 
-		console.log(DW.autocomplete.getPlace());
 		
 	},
 	
@@ -426,7 +430,7 @@ var DW = {
 				$.each(DW.garages, function(index, value){
 
 					// KAREN: CHANGED URL
-					var PTUrl = "http://ms1.glimworm.com/divvapi"+value.reccommended_pt_route.proxy_url+"&callback=?";
+					var PTUrl = "https://ms1.glimworm.com/divvapi"+value.reccommended_pt_route.proxy_url+"&callback=?";
 					//console.log("PROXY URL", value.reccommended_pt_route.proxy_url);
 					$.jsonp( {url:PTUrl,
 						success: function( data ) {
