@@ -10,7 +10,7 @@
 
 		<title>Parkeerwidget Amsterdam</title>
 
-		<link href="css/main.css" rel="stylesheet">
+		<link href="css/main.css?v=1" rel="stylesheet">
 		
 
 		<!-- Alleen voor testen amsterdam Avenir include -->
@@ -127,8 +127,8 @@
 						<option value="0">00:00</option>
 					</select>
 					
-					<select id="duration" placeholder="Hoe lang blijf je?" class="duration-input">
-						<option value=""></option>
+					<select id="duration" class="duration-input">
+						<option disabled selected value="">Hoe lang blijf je?</option>
 						<option value="1">1 uur</option>
 						<option value="2">2 uur</option>
 						<option value="3">3 uur</option>
@@ -219,7 +219,7 @@
 
 			<div class="map-holder">
 				<div id="map"></div>
-				<div id="map-touch"></div>
+				<div class="map-touch"></div>
 			</div>
 
 			
