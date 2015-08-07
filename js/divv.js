@@ -4,7 +4,7 @@ var DW = {
 	 * api url
 	 * @type {String}
 	 */
-	queryUrl: 'https://ms1.glimworm.com/divvapi/apitest.jsp?callback=?',
+	queryUrl: 'http://ms1.glimworm.com/divvapi/apitest.jsp?callback=?',
 
 	/**
 	 * api call params
@@ -404,8 +404,6 @@ var DW = {
 				DW.isInCentrum = data.result.isInAmsterdamCentrum;
 				DW.isInPaidParking = data.result.isInPaidParkingAmsterdam;
 
-				console.log("isInCentrum", DW.isInCentrum);
-				console.log("isInPaidParking ", DW.isInPaidParking);
 
 				if (DW.isInPaidParking === 'n') {
 					$('.gratis-result').show();
@@ -432,21 +430,17 @@ var DW = {
 				// we have 3 types: on-street-meter | parking-garage | park-and-ride
 				// need 1 of each
 
-				// KAREN CHANGED: type: 'park-and ride' to type: 'p-and-r' and changed back
+				// KAREN CHANGED: displaytype: 'park-and ride' to displaytype: 'p-and-r' and changed back
 				if (DW.isInPaidParking === 'y') {
-					types = [{type: 'park-and-ride', count: 3}, {type: 'parking-garage', count: 1}, {type: 'on-street-meter', count: 1}];
+					types = [{displaytype: 'park-and-ride', count: 3}, {displaytype: 'parking-garage', count: 1}, {displaytype: 'on-street-meter', count: 1}];
 				} else {
-					types = [{type: 'park-and-ride', count: 3}, {type: 'parking-garage', count: 1}, {type: 'on-street-meter', count: 0}];
+					types = [{displaytype: 'park-and-ride', count: 3}, {displaytype: 'parking-garage', count: 1}, {displaytype: 'on-street-meter', count: 0}];
 				}
 
 
 				$.each(types, function (index, value) {
-					//console.log("API RESULT:");
-					//console.log(apiResult);
-					//console.log("VALUE TYPE:");
-					//console.log(value.type);
 
-					DW.selectOption(apiResult, value.type, value.count);
+					DW.selectOption(apiResult, value.displaytype, value.count);
 
 				});
 
@@ -455,14 +449,12 @@ var DW = {
 				$.each(DW.garages, function (index, value) {
 
 					// KAREN: CHANGED URL
-					var PTUrl = "https://ms1.glimworm.com/divvapi" + value.reccommended_pt_route.proxy_url + "&callback=?";
-					//console.log("PROXY URL", value.reccommended_pt_route.proxy_url);
+					var PTUrl = "http://ms1.glimworm.com/divvapi" + value.reccommended_pt_route.proxy_url + "&callback=?";
 					$.jsonp({
 						url: PTUrl,
 						success: function (data) {
 							DW.garages[index].reccommended_pt_route = data.result.ptroute;
 							finished++;
-							console.log(finished);
 							if (finished == 5 || DW.isInPaidParking === 'n' && finished == 1 || finished == 2 && DW.isInCentrum !== 'y') {
 								DW.formatRouteData();
 							}
@@ -484,22 +476,13 @@ var DW = {
 		//fix data problems, sanatize for viewing
 		$.each(DW.garages, function (index, value) {
 
-			//console.log('legs:', this.reccommended_pt_route.legs);
 			var garage = DW.garages[index];
-			//console.log('sjaak');
-			//console.log(index);
-
-			//set has_pt to false if only walking
-			console.log(DW.garages[index]);
-			console.log(index, DW.garages[index]['reccommended_pt_route']);
-			//console.log(index, garage['reccommended_pt_route'].legs);
 
 			//return false;
 			// KAREN: bij de p and r's gaan de legs mis
 			if (typeof garage.reccommended_pt_route.legs != 'undefined') {
-				console.log('has legs');
 				$.each(garage.reccommended_pt_route.legs, function (j, val) {
-					if (val.type == "leg") {
+					if (val.displaytype == "leg") {
 						if (val.mode != "walking") {
 							DW.garages[index].has_pt = true;
 							return false;
@@ -522,25 +505,17 @@ var DW = {
 			else if (value.reccommended_pt_route.duration == 1) value.reccommended_pt_route.duration += ' minuut';
 			else value.reccommended_pt_route.duration += ' minuten';
 
-			// console.log("duration", value.reccommended_pt_route.duration);
-
 			if (value.notes == "null") value.notes = false;
 
 			//parse costs
 			value.prcost = value.cost;
 			value.ptcost = value.reccommended_pt_route.cost;
-
-			//if(value.garage_type != 'park-and-ride') {
 			value.cost_total = value.cost + value.reccommended_pt_route.cost;
-			//} else {
-			//value.cost_total = value.cost;
-			//value.reccommended_pt_route.cost = 0;
-			//}
+
 
 			//check if is on street meter and in busy area to add warning mesages
 			pricePerHour = value.cost / DW.params.dur;
 
-			// console.log("PRICE PER HOUR: ", pricePerHour);
 
 			if (value.sort_type == 'on-street-meter' && pricePerHour > 4) {
 				DW.garages[index].busy = "Let op, het is hier vaak druk. Je weet dus nooit zeker of en waar je in de buurt op straat kunt parkeren. In een parkeergarage of op een P+R is vaak wel plek.";
@@ -611,7 +586,6 @@ var DW = {
 	compileTemplates: function () {
 		var source = $("#result-template").html();
 		DW.resultTemplate = Handlebars.compile(source);
-		//console.log('COMPILED TEMPLATES');
 	},
 
 	formatOpeninghoursString: function (data) {
@@ -624,7 +598,6 @@ var DW = {
 		$.each(days, function (index, value) {
 
 			items = value.split(' ');
-			//console.log("data", data);
 
 			// [0]= day(s) [1]=open [3]=close
 
@@ -665,8 +638,6 @@ var DW = {
 		//set count to 1 if not set
 		if (undefined === count) count = 1;
 
-		//console.log('COUNT: '+ count);
-
 		counter = 0;
 
 		var option;
@@ -677,10 +648,10 @@ var DW = {
 		$.each(apiResult, function (index, value) {
 
 
-			if (value.type == 'garage') {
+			if (value.displaytype == 'garage') {
 				type = value.garage_type;
 			} else {
-				type = value.type;
+				type = value.displaytype;
 			}
 
 			// KAREN: Moved counter conditinal up here
@@ -710,7 +681,6 @@ var DW = {
 							option = value;
 						} else if (value.dist_in_meters > startRadius + extraRadius) {
 							DW.garages.push(option);
-							//console.log('garage push: selector route');
 							counter++;
 
 						}
@@ -718,7 +688,6 @@ var DW = {
 
 				} else {
 					DW.garages.push(value);
-					//console.log('garage push');
 					counter++;
 				}
 			}
@@ -734,9 +703,6 @@ var DW = {
 		$('.results .data').html('');
 
 		$.each(this.garages, function (index, value) {
-
-			console.log(value);
-
 			//show only garages that have display true
 			if (value.display) {
 				var result = $(DW.resultTemplate(value));
@@ -747,8 +713,6 @@ var DW = {
 
 				$('.results .data').append(result);
 			}
-
-			//console.log(value.sort_type);
 
 			icon = DW.iconlist[value.sort_type.toString()];
 
@@ -796,10 +760,6 @@ var DW = {
 		legTemplate = Handlebars.compile(source);
 
 		$('.details .container').html(detailTemplate(garage));
-
-		//console.log("DEBUG");
-		//console.log(garage.reccommended_pt_route.legs);
-
 		numLegs = garage.reccommended_pt_route.legs.length;
 
 		//plot every leg of route
@@ -901,7 +861,6 @@ var DW = {
 
 		// KAREN: added 'n/a' conditional
 		if (undefined !== garage.garage_opening_hours && garage.garage_opening_hours !== 'n/a') {
-			console.log("OPEN", garage.garage_opening_hours);
 			openinghours = DW.formatOpeninghoursString(garage.garage_opening_hours)
 			$('.openinghours').html(openinghours);
 		} else {
