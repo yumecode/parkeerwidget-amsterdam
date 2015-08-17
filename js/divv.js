@@ -432,9 +432,15 @@ var DW = {
 
 				// KAREN CHANGED: displaytype: 'park-and ride' to displaytype: 'p-and-r' and changed back
 				if (DW.isInPaidParking === 'y') {
-					types = [{displaytype: 'park-and-ride', count: 3}, {displaytype: 'parking-garage', count: 1}, {displaytype: 'on-street-meter', count: 1}];
+					types = [{displaytype: 'park-and-ride', count: 3}, {displaytype: 'parking-garage', count: 1}, {
+						displaytype: 'on-street-meter',
+						count: 1
+					}];
 				} else {
-					types = [{displaytype: 'park-and-ride', count: 3}, {displaytype: 'parking-garage', count: 1}, {displaytype: 'on-street-meter', count: 0}];
+					types = [{displaytype: 'park-and-ride', count: 3}, {displaytype: 'parking-garage', count: 1}, {
+						displaytype: 'on-street-meter',
+						count: 0
+					}];
 				}
 
 
@@ -444,7 +450,7 @@ var DW = {
 
 				});
 
-				finished = 0
+				var finished = 0
 				//fix data problems, sanatize for viewing
 				$.each(DW.garages, function (index, value) {
 
@@ -455,7 +461,8 @@ var DW = {
 						success: function (data) {
 							DW.garages[index].reccommended_pt_route = data.result.ptroute;
 							finished++;
-							if (finished == 5 || DW.isInPaidParking === 'n' && finished == 1 || finished == 2 && DW.isInCentrum !== 'y') {
+							console.log(finished);
+							if (finished == DW.garages.length) {
 								DW.formatRouteData();
 							}
 						},
@@ -472,7 +479,6 @@ var DW = {
 	},
 
 	formatRouteData: function () {
-
 		//fix data problems, sanatize for viewing
 		$.each(DW.garages, function (index, value) {
 
@@ -482,8 +488,8 @@ var DW = {
 			// KAREN: bij de p and r's gaan de legs mis
 			if (typeof garage.reccommended_pt_route.legs != 'undefined') {
 				$.each(garage.reccommended_pt_route.legs, function (j, val) {
-					if (val.displaytype == "leg") {
-						if (val.mode != "walking") {
+					if (val.type == "leg") {
+						if (val.mode.toUpperCase() != "WALKING") {
 							DW.garages[index].has_pt = true;
 							return false;
 						} else {
@@ -508,9 +514,9 @@ var DW = {
 			if (value.notes == "null") value.notes = false;
 
 			//parse costs
-			value.prcost = value.cost;
-			value.ptcost = value.reccommended_pt_route.cost;
-			value.cost_total = value.cost + value.reccommended_pt_route.cost;
+			value.prcost = value.cost ? value.cost : 0;
+			value.ptcost = value.reccommended_pt_route.cost ? value.reccommended_pt_route.cost : 0;
+			value.cost_total = parseFloat(value.prcost) + parseFloat(value.ptcost);
 
 
 			//check if is on street meter and in busy area to add warning mesages
@@ -525,17 +531,16 @@ var DW = {
 				DW.garages[index].busy = "Dit advies toont een parkeerautomaat in de buurt van je bestemming. Afhankelijk van de beschikbare parkeerplaatsen, kun je mogelijk iets dichterbij parkeren of net iets verder weg.";
 			}
 
-			if (value.cost_total == 0) value.cost_total = 'Gratis'
-			else value.cost_total = '€ ' + value.cost_total.toFixed(2);
+			if (value.cost_total == 0) value.display_cost_total = 'Gratis'
+			else value.display_cost_total = '€ ' + value.cost_total.toFixed(2);
 
-			if (value.cost == 0) value.cost = 'Gratis';
-			else value.cost = '€ ' + value.cost.toFixed(2);
+			if (value.cost == 0) value.display_cost = 'Gratis';
+			else value.display_cost = '€ ' + value.cost.toFixed(2);
 
-			if (value.reccommended_pt_route.cost == 0) value.reccommended_pt_route.cost = 'Gratis';
-			else value.reccommended_pt_route.cost = '€ ' + value.reccommended_pt_route.cost.toFixed(2);
+			if (value.reccommended_pt_route.cost == 0) value.reccommended_pt_route.display_cost = 'Gratis';
+			else value.reccommended_pt_route.display_cost = '€ ' + value.reccommended_pt_route.cost.toFixed(2);
 
 			if (undefined != value.reccommended_pt_route.legs) {
-
 				$.each(value.reccommended_pt_route.legs, function (index, leg) {
 					//rewrite duration to minutes for legs
 					leg.duration = Math.round(leg.duration / 60);
@@ -547,12 +552,14 @@ var DW = {
 				});
 
 				//rename first leg to parking spot's name
-				value.reccommended_pt_route.legs[0].from.name = value.name;
+				value.reccommended_pt_route.legs[0].from.name = DW.capitalizeFirstLetter(value.name);
 
 				// add last leg with only destination name
 				value.reccommended_pt_route.legs.push({from: {name: DW.destinationName}});
 			}
 		});
+
+		console.log(DW.garages);
 
 		DW.compileTemplates();
 		DW.showResults();
@@ -560,6 +567,10 @@ var DW = {
 		setTimeout(function () {
 			Map.fitBounds(new L.featureGroup(DW.markers));
 		}, 0)
+	},
+
+	capitalizeFirstLetter: function (string) {
+		return string.charAt(0).toUpperCase() + string.slice(1);
 	},
 
 	clearMarkers: function () {

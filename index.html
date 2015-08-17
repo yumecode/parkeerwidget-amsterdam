@@ -255,7 +255,7 @@
 			<div class="icon icon-{{ prcost }}euro"></div>
 			{{/equal}}
 			<div class="time">Reistijd <br><span class="value">{{reccommended_pt_route.duration}}</span></div>
-			<div class="cost">Kosten <br><span class="value">{{cost_total}}</span></div>
+			<div class="cost">{{#if has_pt}}Totale{{/if}} Kosten <br><span class="value">{{display_cost_total}}</span></div>
 			<div class="arrow"></a>
 		</div>
 	</script>
@@ -269,7 +269,7 @@
 			<div class="icon icon-{{ prcost }}euro"></div>
 			{{/equal}}
 			<div class="time">Reistijd <br><span class="value">{{reccommended_pt_route.duration}}</span></div>
-			<div class="cost">Kosten <br><span class="value">{{cost_total}}</span></div>
+			<div class="cost">{{#if has_pt}}Totale{{/if}}Kosten <br><span class="value">{{display_cost_total}}</span></div>
 			{{#equal sort_type "park-and-ride"}}<span class="remark">{{notes}}</span>{{/equal}}
 			{{#if garage_infourl}}<span class="remark"><a href="{{garage_infourl}}" target="_blank">Meer over {{name}}</a></span>{{/if}}
 			
@@ -285,8 +285,8 @@
 		
 		<div class="pr-info">
 			{{#if has_pt}}
-				<div class="cost">Parkeren <br><span class="value">{{cost}}</span></div>
-				{{#notequal reccommended_pt_route.cost "Gratis"}}<div class="cost">Kosten OV <br><span class="value">{{reccommended_pt_route.cost}} p.p.</span></div>{{/notequal}}
+				<div class="cost">Parkeren <br><span class="value">{{display_cost}}</span></div>
+				{{#notequal reccommended_pt_route.cost "Gratis"}}<div class="cost">Kosten OV <br><span class="value">{{reccommended_pt_route.display_cost}} p.p.</span></div>{{/notequal}}
 			{{/if}}
 
 			{{#notequal sort_type "on-street-meter"}}
