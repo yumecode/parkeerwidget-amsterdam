@@ -4,7 +4,7 @@ var DW = {
 	 * api url
 	 * @type {String}
 	 */
-	queryUrl: 'http://ms1.glimworm.com/divvapi/apitest.jsp?callback=?',
+	queryUrl: 'https://divvapi.parkshark.nl/apitest.jsp?callback=?',
 
 	/**
 	 * api call params
@@ -449,7 +449,7 @@ var DW = {
 				$.each(DW.garages, function (index, value) {
 
 					// KAREN: CHANGED URL
-					var PTUrl = "http://ms1.glimworm.com/divvapi" + value.reccommended_pt_route.proxy_url + "&callback=?";
+					var PTUrl = "https://divvapi.parkshark.nl/divvapi" + value.reccommended_pt_route.proxy_url + "&callback=?";
 					$.jsonp({
 						url: PTUrl,
 						success: function (data) {
