@@ -409,11 +409,6 @@ var DW = {
 					$('.gratis-result').show();
 				}
 
-				if (DW.isInCentrum === 'n') {
-					$('.not-centrum-warning').show();
-				}
-
-
 				DW.clearMarkers();
 
 				apiResult = data.result.reccommendations;
@@ -558,8 +553,6 @@ var DW = {
 				value.reccommended_pt_route.legs.push({from: {name: DW.destinationName}});
 			}
 		});
-
-		console.log(DW.garages);
 
 		DW.compileTemplates();
 		DW.showResults();
@@ -876,6 +869,10 @@ var DW = {
 			$('.openinghours').html(openinghours);
 		} else {
 			$('.openinghours').html("Niet bekend");
+		}
+
+		if (DW.isInCentrum === 'n' && garage.sort_type === "park-and-ride") {
+			$('.not-centrum-warning').show();
 		}
 
 		$('.results').animate({right: $(".results").outerWidth() + 'px'}, 300, function () {
