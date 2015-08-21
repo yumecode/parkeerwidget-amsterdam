@@ -602,6 +602,7 @@ var DW = {
 		$.each(days, function (index, value) {
 
 			items = value.split(' ');
+			console.log(items);
 
 			// [0]= day(s) [1]=open [3]=close
 
@@ -615,7 +616,7 @@ var DW = {
 				returnString += daysString[fromDay] + ' - ' + daysString[toDay] + ' ';
 
 				//hours
-				if (items[1] == '0000' && items[3] == '0000') returnString += "24 uur per dag";
+				if (items[1] == '0000' && items[3] == '2359') returnString += "24 uur per dag";
 				else returnString += items[1] + '-' + items[3];
 				returnString += "<br>";
 			} else {
@@ -624,7 +625,7 @@ var DW = {
 				returnString += daysString[items[0][0]] + ' ';
 
 				//hours
-				if (items[1] == '0000' && items[3] == '0000') returnString += "24 uur per dag";
+				if (items[1] == '0000' && items[3] == '2359') returnString += "24 uur per dag";
 				else returnString += items[1][0] + items[1][1] + ':' + items[1][2] + items[1][3] + ' tot ' + items[3][0] + items[3][1] + ':' + items[3][2] + items[3][3];
 				returnString += "<br>";
 			}
