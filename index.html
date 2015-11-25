@@ -269,7 +269,7 @@
 			<div class="icon icon-{{ prcost }}euro"></div>
 			{{/equal}}
 			<div class="time">Reistijd <br><span class="value">{{reccommended_pt_route.duration}}</span></div>
-			<div class="cost">{{#if has_pt}}Totale{{/if}}Kosten <br><span class="value">{{display_cost_total}}</span></div>
+			<div class="cost">{{#if has_pt}}Totale {{/if}}Kosten <br><span class="value">{{display_cost_total}}</span></div>
 			{{#equal sort_type "park-and-ride"}}<span class="remark">{{notes}}</span>{{/equal}}
 			{{#if garage_infourl}}<span class="remark"><a href="{{garage_infourl}}" target="_blank">Meer over {{name}}</a></span>{{/if}}
 			

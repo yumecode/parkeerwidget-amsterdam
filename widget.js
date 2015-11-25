@@ -7,3 +7,11 @@ window.onresize = function(){
 		iframe.style.height = '450px';
 	}
 }
+
+if (typeof console == 'undefined') {
+	console = {
+		log: function () {
+			return false;
+		}
+	}
+}

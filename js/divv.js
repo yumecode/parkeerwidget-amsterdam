@@ -159,7 +159,7 @@ var DW = {
 	months: ['januari', 'februari', 'maart', 'april', 'mei', 'juni', 'julie', 'augustus', 'september', 'oktober', 'november', 'december'],
 	months: ['jan', 'feb', 'mrt', 'apr', 'mei', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec'],
 	//		0	   1	2	 3	  4	   5    6
-	days: ['Zo	', 'Ma', 'Di', 'Wo', 'Do', 'Vr', 'Za'],
+	days: ['Zo', 'Ma', 'Di', 'Wo', 'Do', 'Vr', 'Za'],
 
 	/**
 	 * initalizes the app
@@ -456,7 +456,6 @@ var DW = {
 						success: function (data) {
 							DW.garages[index].reccommended_pt_route = data.result.ptroute;
 							finished++;
-							console.log(finished);
 							if (finished == DW.garages.length) {
 								DW.formatRouteData();
 							}
@@ -595,14 +594,13 @@ var DW = {
 	formatOpeninghoursString: function (data) {
 
 		//				   0	     1		   2		  3			  4			5		   6
-		var daysString = ['Maandag', 'Dinsdag', 'Woensdag', 'Donderdag', 'Vrijdag', 'Zaterdag', 'Zondag'];
+		var daysString = ['Zondag', 'Maandag', 'Dinsdag', 'Woensdag', 'Donderdag', 'Vrijdag', 'Zaterdag'];
 		days = data.split('|');
 		var returnString = '';
 
 		$.each(days, function (index, value) {
 
 			items = value.split(' ');
-			console.log(items);
 
 			// [0]= day(s) [1]=open [3]=close
 
@@ -613,11 +611,20 @@ var DW = {
 				toDay = items[0][2];
 
 				//days
-				returnString += daysString[fromDay] + ' - ' + daysString[toDay] + ' ';
-
+				if (fromDay == "0" && toDay == "6") {
+					returnString += 'Maandag - Zondag ';
+				} else {
+					returnString += daysString[fromDay] + ' - ' + daysString[toDay] + ' ';
+				}
+				
 				//hours
-				if (items[1] == '0000' && items[3] == '2359') returnString += "24 uur per dag";
-				else returnString += items[1] + '-' + items[3];
+				if (items[1] == '0000' && items[3] == '2359') {
+					returnString += "24 uur per dag";
+				} else if (items[1] == '9999') {
+					returnString += "gesloten";
+				} else {
+					returnString += items[1][0]+items[1][1]+':'+items[1][2]+items[1][3] + '-' + items[3][0] + items[3][1] + ':' + items[3][2] + items[3][3];
+				}
 				returnString += "<br>";
 			} else {
 
@@ -625,8 +632,13 @@ var DW = {
 				returnString += daysString[items[0][0]] + ' ';
 
 				//hours
-				if (items[1] == '0000' && items[3] == '2359') returnString += "24 uur per dag";
-				else returnString += items[1][0] + items[1][1] + ':' + items[1][2] + items[1][3] + ' tot ' + items[3][0] + items[3][1] + ':' + items[3][2] + items[3][3];
+				if (items[1] == '0000' && items[3] == '2359') {
+					returnString += "24 uur per dag";
+				} else if (items[1] == '9999') {
+					returnString += "gesloten";
+				} else {
+					returnString += items[1][0] + items[1][1] + ':' + items[1][2] + items[1][3] + ' tot ' + items[3][0] + items[3][1] + ':' + items[3][2] + items[3][3];
+				}
 				returnString += "<br>";
 			}
 
