@@ -30,7 +30,6 @@ var Feedback =  {
 
 		$('.feedback-form').on('submit', function(e){
 			e.preventDefault();
-			console.log("feedback");
 
 			var formData = {
 				'feedback': $('.widget-feedback').val(),
@@ -43,7 +42,6 @@ var Feedback =  {
 		            url: '../feedback',
 		            data: formData,
 		            success: function (data) {
-		            	console.log(data);
 		            	if (data == false) {
 		            		$('.feedback-error').show();
 		            	} else {

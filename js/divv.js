@@ -244,7 +244,7 @@ var DW = {
 	 */
 	home: function () {
 
-		ga('send', 'event', 'button', 'back to home', 'home');
+		ga('send', 'event', 'click', 'wijzig (home) button');
 
 		$(".results").fadeOut(300, function () {
 			$('.gratis-result').hide();
@@ -259,7 +259,7 @@ var DW = {
 	 */
 	overview: function () {
 
-		ga('send', 'event', 'button', 'back to overview', 'overview');
+		ga('send', 'event', 'click', 'overview button');
 
 		$('.container').animate({scrollTop: "0"});
 
@@ -302,7 +302,7 @@ var DW = {
 	 */
 	prepareQuery: function () {
 
-		ga('send', 'event', 'button', 'search', 'search');
+		ga('send', 'event', 'search');
 
 		$('div.search-warning').hide();
 		$('div.api-warning').hide();
@@ -316,6 +316,8 @@ var DW = {
 
 		DW.params.dur = $("#duration").val();
 		DW.params.h = $("#time").val();
+		
+		ga('send', 'event', 'search details: duration', DW.params.dur);
 
 		if (cor) {
 			DW.params.to_lat = cor.lat;
@@ -418,6 +420,13 @@ var DW = {
 				DW.destinationMarker = marker;
 
 				var searchDate = new Date(DW.params.yy, DW.params.mm - 1, DW.params.dd);
+				
+				// Calculate how many days in the future
+				var currentDate = new Date();
+				currentDate.setHours(0,0,0,0);
+				var timeDiff = Math.abs(currentDate.getTime() - searchDate.getTime());
+				var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
+				ga('send', 'event', 'search details: days in future', diffDays);
 
 				var durationString = DW.days[searchDate.getDay()] + ' ' + DW.params.dd + ' ' + DW.months[DW.params.mm - 1] + ' ' + DW.params.h + ':00 voor ' + DW.params.dur + ' uur';
 				$('.date-durations').html(durationString);
@@ -762,7 +771,7 @@ var DW = {
 	 */
 	showDetail: function (garage) {
 
-		ga('send', 'event', 'detailpage', garage.sort_type, 'click');
+		ga('send', 'event', 'click', 'detailpage ' + garage.sort_type);
 
 		//hide other garage icons
 		$.each(DW.garages, function (index, value) {
